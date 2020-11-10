@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Product.belongsTo(models.Category);
     }
   };
   Product.init({
@@ -39,6 +40,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'Price is required'
         },
+        isNumeric: {
+          msg: 'Price has to be in number format'
+        },
         min: {
           args: [0],
           msg: `Price must be greater than or equal to 0`
@@ -50,6 +54,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: 'Stock is required'
+        },
+        isNumeric: {
+          msg: 'Stock has to be in number format'
         },
         min: {
           args: [0],
