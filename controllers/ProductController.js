@@ -20,6 +20,7 @@ class ProductController {
     } = req.body;
     try {
       if (!category.trim()) category = 'general';
+      else category = category.toLowerCase();
 
       const checkCat = await Category.findOne({
         where: {
