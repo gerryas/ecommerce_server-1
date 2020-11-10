@@ -8,7 +8,7 @@ module.exports = {
       {
         name: faker.name.findName(),
         email: 'admin@mail.com',
-        password: hashPassword(`1234`),
+        password: hashPassword(`asdfgh`),
         role: 'admin',
         avatar: faker.image.avatar(),
         createdAt: new Date(),
