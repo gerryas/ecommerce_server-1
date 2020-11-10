@@ -1,5 +1,39 @@
 const request = require('supertest');
 const app = require('../app');
+const { User } = require('../models');
+const faker = require('faker');
+
+let id;
+
+beforeAll(async (done) => {
+  try {
+    const newUser = await User.create({
+      name: faker.name.findName(),
+      email: 'admin@mail.com',
+      password: 'asdfgh',
+      avatar: faker.image.avatar(),
+      role: 'admin'
+    });
+    id = newUser.id;
+    done();
+  } catch (err) {
+    done(err);
+  }
+  
+});
+
+afterAll(async (done) => {
+  try {
+    const deleteUser = await User.destroy({
+      where: {
+        id
+      }
+    });
+    done();
+  } catch (err) {
+    done(err);
+  }
+})
 
 describe('Test POST /login', () => {
   // ? SUCCESS TEST CASE
@@ -8,7 +42,7 @@ describe('Test POST /login', () => {
       .post('/login')
       .send({
         email: 'admin@mail.com',
-        password: '1234',
+        password: 'asdfgh',
       });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -42,7 +76,7 @@ describe('Test POST /login', () => {
       .post('/login')
       .send({
         email: 'admin@mail.com',
-        password: 'asdfgh',
+        password: 'asdfghj',
       });
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
