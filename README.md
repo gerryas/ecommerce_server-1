@@ -1,7 +1,7 @@
 # ecommerce_server
 E-commerce App is an application for user to display and/or sell their product. This app has : 
 * Error case response
-* RESTful endpoint for product's CRUD operation
+* RESTful endpoint for product's and banner's CRUD operation
 * JSON formatted response
 
 &nbsp;
@@ -24,6 +24,7 @@ _Response_
 ```
 
 ## RESTful endpoints
+
 ### POST /login
 
 > Create access token based on user login data
@@ -56,9 +57,10 @@ _Response (200 - OK)_
   "role": "string" 
 }
 ```
+
 ### GET /categories
 
-> Get all categories and products
+> Get all categories includes its products and banners
 
 _Request Headers_
 ```
@@ -92,7 +94,20 @@ _Response (200 -OK)_
           "image_url": "string",
           "price": "string"
           "stock": "string"
-          "CategoryId: number
+          "CategoryId: number,
+          "createdAt": "string",
+          "updatedAt": "string",
+        },
+        { ... },
+        { ... }
+    ],
+    "Banners": [
+        {
+          "id": number,
+          "title": "string",
+          "image_url": "string",
+          "status": boolean,
+          "CategoryId: number,
           "createdAt": "string",
           "updatedAt": "string",
         },
@@ -112,7 +127,20 @@ _Response (200 -OK)_
           "image_url": "string",
           "price": "string"
           "stock": "string"
-          "CategoryId: number
+          "CategoryId: number,
+          "createdAt": "string",
+          "updatedAt": "string",
+        },
+        { ... },
+        { ... }
+    ],
+    "Banners": [
+        {
+          "id": number,
+          "title": "string",
+          "image_url": "string",
+          "status": boolean,
+          "CategoryId: number,
           "createdAt": "string",
           "updatedAt": "string",
         },
@@ -323,5 +351,199 @@ _Response (200 - OK)_
 ```
 {
   "msg": "Product deleted",
+}
+```
+
+### POST /banners
+
+> Create new banner
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Parameters_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+  "name": "string",
+  "image_url": "string",
+  "status": boolean,
+  "category": "string"
+}
+```
+
+_Response (200)_
+```
+{
+  "id": number,
+  "title": "string",
+  "image_url": "string",
+  "status": boolean,
+  "CategoryId": number,
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
+
+### GET /banners
+
+> Get all banners
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+not needed
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - OK)_
+```
+[
+  {
+    "id": number,
+    "title": "string",
+    "image_url": "string",
+    "status": boolean,
+    "CategoryId": number,
+    "createdAt": "string",
+    "updatedAt": "string"
+  },
+  {
+    "id": number,
+    "title": "string",
+    "image_url": "string",
+    "status": boolean,
+    "CategoryId": number,
+    "createdAt": "string",
+    "updatedAt": "string"
+  },
+  {...},
+  {...}
+]
+
+```
+
+### GET /banners/:bannerId
+
+> Get spesific banner
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+{
+  "bannerId": number
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - OK)_
+```
+{
+  "id": number,
+  "title": "string",
+  "image_url": "string",
+  "status": boolean,
+  "CategoryId": number,
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
+
+### PUT /banners/:bannerId
+
+> Update banner. 
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+{
+  "bannerId": number,
+}
+```
+
+_Request Body_
+```
+{
+  "name": "string",
+  "image_url": "string",
+  "status": boolean,
+  "category": "string"
+}
+```
+
+_Response (200 - OK)_
+```
+{
+  "id": number,
+  "title": "string",
+  "image_url": "string",
+  "status": boolean,
+  "CategoryId": number,
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
+
+### DELETE /banners/:bannerId
+
+> Delete banner. 
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+{
+  "bannerId": number,
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - OK)_
+```
+{
+  "msg": "Banner deleted",
 }
 ```
