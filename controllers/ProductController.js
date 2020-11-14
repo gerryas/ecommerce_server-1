@@ -10,6 +10,22 @@ class ProductController {
     }
   }
 
+  static async findOne (req, res, next) {
+    const id = +req.params.productId
+    try {
+      const product = await Product.findByPk(id);
+      if (!product) {
+        throw {
+          name: 'NotFound'
+        };
+      } else {
+        res.status(200).json(product);
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async create (req, res, next) {
     let {
       name, 
@@ -53,7 +69,7 @@ class ProductController {
   }
 
   static async update (req, res, next) {
-    const id = req.params.productId;
+    const id = +req.params.productId;
     let {
       name, 
       image_url, 
@@ -105,7 +121,7 @@ class ProductController {
   }
 
   static async delete (req, res, next) {
-    const id = req.params.productId;
+    const id = +req.params.productId;
     try {
       const deletedProduct = await Product.destroy({
         where: {

@@ -335,6 +335,39 @@ describe('Test GET /products', () => {
   });
 });
 
+describe('Test GET /products/:productId', () => {
+  // ? SUCCESS GET PRODUCT TEST CASE
+  it('SUCCESS get product', async (done) => {
+    const res = await request(app)
+      .get(`/products/${productId}`)
+      .set('access_token', access_token);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      id: productId,
+      name: 'PS5',
+      image_url: 'https://cdn.mos.cms.futurecdn.net/4waSNEzfKYTE8rpAkU6FR4.png',
+      price: 11000000,
+      stock: 10,
+      CategoryId: expect.any(Number),
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String)
+    });
+    done();
+  });
+
+  // ! FAILED GET PRODUCT WHEN TOKEN UNDEFINED/FALSE
+  it('FAILED get product when token undefined/false', async (done) => {
+    const res = await request(app)
+    .get(`/products/${productId}`)
+    .set('access_token', 'abc');
+    expect(res.status).toBe(401);
+    expect(res.body).toEqual({
+      error: "You don't have access to do that"
+    });
+    done();
+  });
+});
+
 describe('Test PUT /products/:productId', () => {
   // ? SUCCESS EDIT PRODUCT TEST CASE
   it('SUCCESS edit product', async (done) => {

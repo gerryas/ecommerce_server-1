@@ -4,6 +4,7 @@ const { loginToken } = require('../helpers/jwt');
 
 class UserController {
   static async login (req, res, next) {
+    console.log(req.body);
     try {
       const { email, password } = req.body;
       const user = await User.findOne({
