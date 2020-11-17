@@ -1,5 +1,5 @@
 const { verifyToken } = require('../helpers/jwt');
-const { User, UserProject, Task } = require('../models');
+const { User, Cart } = require('../models');
 
 const authentication = async (req, res, next) => {
   const access_token = req.headers.access_token;
@@ -38,7 +38,7 @@ const authorizationAdmin = async (req, res, next) => {
     if (role !== 'admin') {
       throw {
         name: 'AuthorizationFailed'
-      }
+      };
     } else {
       next();
     }
@@ -48,29 +48,49 @@ const authorizationAdmin = async (req, res, next) => {
   }
 }
 
-// const authorizationTask = async (req, res, next) => {
-//   const taskId = +req.params.taskId;
-//   const userId = req.user.id;
+const authorizationCust = async (req, res, next) => {
+  const { role } = req.user
+  try {
+    if (role !== 'customer') {
+      throw {
+        name: 'AuthorizationFailed'
+      }
+    } else {
+      next();
+    }
 
-//   try {
-//     const userTask = await Task.findByPk(taskId);
-//     if (!userTask) {
-//       throw {
-//         name: 'NotFound'
-//       };
-//     } else if (userTask.UserId !== userId) {
-//       throw {
-//         name: 'AuthorizationFailed'
-//       };
-//     } else {
-//       next();
-//     }
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+  } catch (err) {
+    next(err)
+  } 
+}
+
+const authorizationCart = async (req, res, next) => {
+  const UserId = req.user.id;
+  const ProductId = +req.params.id;
+  try {
+    const cart = await Cart.findOne({
+      where: {
+        UserId,
+        ProductId
+      }
+    });
+
+    if (!cart) {
+      throw {
+        name: 'AuthorizationFailed'
+      };
+    } else {
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+
+}
 
 module.exports = {
   authentication,
-  authorizationAdmin
+  authorizationAdmin,
+  authorizationCust,
+  authorizationCart
 }

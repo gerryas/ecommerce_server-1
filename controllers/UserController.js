@@ -3,10 +3,27 @@ const { comparePassword } = require('../helpers/hash');
 const { loginToken } = require('../helpers/jwt');
 
 class UserController {
-  static async login (req, res, next) {
-    console.log(req.body);
+  static async register (req, res, next) {
+    const { name, email, password, avatar } = req.body;
     try {
-      const { email, password } = req.body;
+      const user = await User.create({
+        name, email, password, avatar
+      })
+
+      res.status(201).json({
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        role: user.role
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async login (req, res, next) {
+    const { email, password } = req.body;
+    try {
       const user = await User.findOne({
         where: {
           email: email

@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const BannerController = require('../controllers/BannerController');
-const { authorizationAdmin } = require('../middlewares/auth');
+const { authentication, authorizationAdmin } = require('../middlewares/auth');
 
 router.get('/', BannerController.findAll);
 router.get('/:bannerId', BannerController.findOne);
-router.use(authorizationAdmin);
+router.use(authentication, authorizationAdmin);
 router.post('/', BannerController.create);
 router.put('/:bannerId', BannerController.update);
 router.delete('/:bannerId', BannerController.delete);
