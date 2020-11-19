@@ -547,3 +547,161 @@ _Response (200 - OK)_
   "msg": "Banner deleted",
 }
 ```
+
+### GET /cart
+
+> Get all user's cart
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+not needed
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - OK)_
+```
+  {
+    "id": number,
+    "name": "string",
+    "email": "string",
+    "avatar": number,
+    "createdAt": "string",
+    "updatedAt": "string",
+    "Products": [
+      {
+        "id": number,
+        "name": "string",
+        "image_url": "string",
+        "price": number,
+        "stock": number,
+        "CategoryId": number,
+        "createdAt": "string",
+        "updatedAt": "string",
+        "Cart": {
+          "UserId": number,
+          "ProductId": number,
+          "amount": number,
+          "createdAt": "string",
+          "updatedAt": "string",
+        }
+      },
+      { ... },
+      { ... }
+    ]
+  }
+```
+
+### POST /carts
+
+> Create new banner
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Parameters_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+  "ProductId": number
+}
+```
+
+_Response (200 OR 201)_
+```
+{
+  "UserId": number,
+  "ProductId": number,
+  "amount": number,
+  "status": boolean,
+  "id": number,
+  "createdAt": "string",
+  "updatedAt": "string",
+}
+```
+
+### PATCH /carts/:id
+
+> Update cart amount. 
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+{
+  "id": number,
+}
+```
+
+_Request Body_
+```
+{
+  "amount": number
+}
+```
+
+_Response (200 - OK)_
+```
+{
+  "UserId": number,
+  "ProductId": number,
+  "amount": number,
+  "status": boolean,
+  "id": number,
+  "createdAt": "string",
+  "updatedAt": "string",
+}
+```
+
+### DELETE /carts/:id
+
+> Delete cart. 
+
+_Request Headers_
+```
+{
+  "accessToken": "string"
+}
+```
+
+_Path Parameters_
+```
+{
+  "id": number,
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - OK)_
+```
+{
+  "msg": "Cart deleted",
+}
+```

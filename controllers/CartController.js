@@ -21,12 +21,19 @@ class CartController {
     const UserId = req.user.id;
     const { ProductId } = req.body;
     try {
-      const cart = await Cart.create({
-        UserId,
-        ProductId
-      });
-
-      res.status(201).json(cart)
+      const check = await Product.findByPk(ProductId)
+      if (check.stock > 0) {
+        const [ cart, created ] = await Cart.findOrCreate({
+          where: {
+            UserId,
+            ProductId
+          }
+        })
+        if (created) res.status(201).json(cart)
+        else res.status(200).json(cart)
+      } else {
+        throw new Error ('Product stock is empty')
+      }
     } catch (err) {
       next(err);
     }
@@ -35,25 +42,31 @@ class CartController {
   static async patch (req, res, next) {
     const UserId = req.user.id;
     const ProductId = +req.params.id;
-    const { amount, status } = req.body;
+    const { amount } = req.body;
     try {
-      const cart = await Cart.update({
-        amount,
-        status
-      }, {
-        where: {
-          ProductId,
-          UserId
-        },
-        returning: true
-      });
 
-      if (cart[1].length > 0) {
-        res.status(200).json(cart[1][0]);
+      const check = await Product.findByPk(ProductId);
+      console.log(check.stock);
+      if (amount <= check.stock) {
+        const cart = await Cart.update({
+          amount
+        }, {
+          where: {
+            ProductId,
+            UserId
+          },
+          returning: true
+        });
+  
+        if (cart[1].length > 0) {
+          res.status(200).json(cart[1][0]);
+        } else {
+          throw {
+            name: 'NotFound'
+          };
+        }
       } else {
-        throw {
-          name: 'NotFound'
-        };
+        throw new Error ('Product stock is empty')
       }
 
     } catch (err) {

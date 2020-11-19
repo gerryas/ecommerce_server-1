@@ -1,6 +1,7 @@
 const errorHandler = (err, req, res, next) => {
   const name = err.name || '';
   let status, error;
+  console.log(err);
   
   switch (name) {
     case 'SequelizeValidationError':
@@ -24,12 +25,10 @@ const errorHandler = (err, req, res, next) => {
       status = 404;
       error = 'Error Not Found';
       break;
-    // case 'Error':
-    //   if (err.message === 'User already include as collaborators!') {
-    //     status = 400;
-    //     error = err.message;
-    //     break;
-    //   }
+    case 'Error':
+      status = 400;
+      error = err.message;
+      break;
     default:
       status = 500;
       error = 'Internal server error';
