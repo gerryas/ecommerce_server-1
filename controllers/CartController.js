@@ -1,4 +1,4 @@
-const { Cart, Product, User } = require('../models');
+const { Cart, Product, User, sequelize } = require('../models');
 
 class CartController {
   static async find (req, res, next) {
@@ -26,7 +26,8 @@ class CartController {
         const [ cart, created ] = await Cart.findOrCreate({
           where: {
             UserId,
-            ProductId
+            ProductId,
+            status: false
           }
         })
         if (created) res.status(201).json(cart)
@@ -94,6 +95,45 @@ class CartController {
           name: 'NotFound'
         };
       }
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async checkout (req, res, next) {
+    const UserId = req.user.id;
+    try {
+      const carts = await Cart.update({
+        status: true
+      }, {
+        where: {
+          UserId,
+          status: false
+        },
+        returning: true
+      });
+
+      if (carts[1].length === 0) {
+        throw {
+          name: 'NotFound'
+        };
+      }
+
+      const checkout = await Promise.all(carts[1].map(async cart => {
+        const done = await Product.update({
+          stock: sequelize.literal(`stock - ${cart.amount}`)
+        }, {
+          where: {
+            id: cart.ProductId
+          },
+          returning: true
+        });
+        return done; 
+      }));
+
+      const history = checkout.map(el => el[1])
+
+      res.status(200).json(history)
     } catch (err) {
       next(err);
     }
