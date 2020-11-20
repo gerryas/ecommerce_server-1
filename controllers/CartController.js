@@ -131,9 +131,9 @@ class CartController {
         return done; 
       }));
 
-      const history = checkout.map(el => el[1])
+      const updated = checkout.map(el => el[1])
 
-      res.status(200).json(history)
+      res.status(200).json(updated)
     } catch (err) {
       next(err);
     }
